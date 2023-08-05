@@ -24,29 +24,40 @@ def is_strong_password(password):
 
 # Function to register a new user
 def register():
-    username = input("Enter a username: ")
+    with open("credentials.txt", "w") as file:
+        
+        username = input("Enter a username: ")
 
-    if username in user_database:
-        print("Username already taken.")
-        return
+        if username in user_database:
+            print("Username already taken.")
+            return
 
-    password = input("Enter a password: ")
-    if not is_strong_password(password):
-        print("Password is not strong enough.")
-        return
+        password = input("Enter a password: ")
+        if not is_strong_password(password):
+            print("Password is not strong enough.")
+            return
 
-    user_database[username] = password
-    print("Registration successful!")
+        user_database[username] = password
+        file.write(f"{username}, {password}")
+        print("Registration successful!")
 
 
 def login():
-    username = input("Enter your username: ")
-    password = input("Enter your password: ")
-
-    if username in user_database and user_database[username] == password:
-        print("Login successful!")
-    else:
-        print("Login failed. Please check your username and password.")
+    with open("credentials.txt", "r") as file:
+        credentials = file.readlines()
+        valid_credentials = False
+        if not valid_credentials:
+            username = input("Enter your username : ")
+            password = input("Enter your password : ")
+        for credential in credentials:  
+            credentials_list = credential.strip().split(", ") 
+            user_name = credentials_list[0]
+            pass_word = credentials_list[1]
+            if username == user_name and password == pass_word:
+                valid_credentials = True
+                print("Login successful!")
+            else:
+                print("Login failed. Please check your username and password.")
 
 
 while True:
@@ -61,6 +72,3 @@ while True:
         break
     else:
         print("Invalid choice. Please select a valid option.")
-
-            
-
